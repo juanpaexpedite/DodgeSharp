@@ -1,0 +1,76 @@
+[gd_scene load_steps=6 format=2]
+
+[ext_resource path="res://Logic/Main.cs" type="Script" id=1]
+[ext_resource path="res://Scenes/Mob.tscn" type="PackedScene" id=2]
+[ext_resource path="res://Scenes/Player.tscn" type="PackedScene" id=3]
+[ext_resource path="res://Scenes/HUD.tscn" type="PackedScene" id=4]
+
+[sub_resource type="Curve2D" id=1]
+
+bake_interval = 5.0
+_data = {
+"points": PoolVector2Array( 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 480, 0, 0, 0, 0, 0, 480, 720, 0, 0, 0, 0, 0, 720, 0, 0, 0, 0, 0, 0 )
+}
+_sections_unfolded = [ "Resource" ]
+
+[node name="Main" type="Node"]
+
+script = ExtResource( 1 )
+_sections_unfolded = [ "Pause" ]
+Mob = ExtResource( 2 )
+Score = 0
+
+[node name="Player" parent="." index="0" instance=ExtResource( 3 )]
+
+position = Vector2( 265.292, 257.755 )
+
+[node name="MobTimer" type="Timer" parent="." index="1"]
+
+process_mode = 1
+wait_time = 0.5
+one_shot = false
+autostart = false
+
+[node name="ScoreTimer" type="Timer" parent="." index="2"]
+
+process_mode = 1
+wait_time = 1.0
+one_shot = false
+autostart = false
+
+[node name="StartTimer" type="Timer" parent="." index="3"]
+
+process_mode = 1
+wait_time = 2.0
+one_shot = true
+autostart = false
+
+[node name="StartPosition" type="Position2D" parent="." index="4"]
+
+position = Vector2( 240, 450 )
+_sections_unfolded = [ "Transform" ]
+
+[node name="MobPath" type="Path2D" parent="." index="5"]
+
+editor/display_folded = true
+curve = SubResource( 1 )
+
+[node name="MobSpawnLocation" type="PathFollow2D" parent="MobPath" index="0"]
+
+offset = 0.0
+h_offset = 0.0
+v_offset = 0.0
+rotate = true
+cubic_interp = true
+loop = true
+lookahead = 4.0
+
+[node name="HUD" parent="." index="6" instance=ExtResource( 4 )]
+
+[connection signal="timeout" from="MobTimer" to="." method="OnMobTimerTimeout"]
+
+[connection signal="timeout" from="ScoreTimer" to="." method="OnScoreTimerTimeout"]
+
+[connection signal="timeout" from="StartTimer" to="." method="OnStartTimerTimeout"]
+
+
